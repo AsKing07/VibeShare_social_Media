@@ -107,7 +107,7 @@ export default function Posts({ user }) {
               key={post.id} 
               className="w-full p-5 shadow-lg hover:shadow-xl transition duration-300" 
               post={post}
-              userId={user.id}
+              userId={user?.id}
               onDelete={() => handleDeletePost(post.id)}
               onEdit={() => handleEditPost(post)}
             />
