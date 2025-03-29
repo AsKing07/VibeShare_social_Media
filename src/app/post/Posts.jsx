@@ -5,6 +5,7 @@ import {PostCard } from "@/components/ui/card";
 import Image from "next/image";
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, CircularProgress } from "@mui/material";
 import PostForm from "./PostForm";
+import { redirect } from "next/navigation";
 
 export default function Posts({ user }) {
   const supabase = createClient();
@@ -121,16 +122,32 @@ export default function Posts({ user }) {
         variant="contained"
         color="primary"
         style={{ position: 'fixed', bottom: '20px', right: '20px' }}
-        onClick={() => setOpenDialog(true)}
+        onClick={() =>{
+          if (user) {
+            setOpenDialog(true);
+          }
+          else{
+            redirect("/auth/login");
+          }
+        }}
       >
         Créer un post
       </Button>
+      {
+        user &&
+        (
+          <>
+           
 
 <PostForm post={postToEdit} user={user} sidebarOpen={openDialog} closeSidebar={()=>{
   setOpenDialog(false);
   setPostToEdit(null);
 }}  />
 
+          </>
+        )
+      }
+     
     </div>
         </div>
       </div>

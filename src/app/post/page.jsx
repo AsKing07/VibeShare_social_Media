@@ -8,13 +8,22 @@ export default async function PostsPage() {
       data: { user },
     } = await supabase.auth.getUser();
 
-    const { data: profilData, error: profilError } = await supabase
-    .from("profiles")
-    .select(`*`)
-    .eq("id", user.id)
-    .single();
+    if(user)
+    {
+      const { data: profilData, error: profilError } = await supabase
+      .from("profiles")
+      .select(`*`)
+      .eq("id", user.id)
+      .single();
+  
+  
+      return <Posts user={profilData} />;
 
-
-    return <Posts user={profilData} />;
+    }
+    else
+    {
+      return <Posts user={user} />;
+    }
+  
   }
   
