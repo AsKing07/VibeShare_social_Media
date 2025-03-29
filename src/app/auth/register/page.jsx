@@ -8,6 +8,21 @@ export default function RegisterPage() {
   const [passwordHiden, setPasswordHiden] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const formData = new FormData(event.target);
+
+    try {
+      const result = await signup(formData);
+      if (result.redirect) {
+        // Redirigez l'utilisateur vers la page de vérification d'email
+        window.location.href = result.redirect;
+      }
+    } catch (error) {
+      console.error("Erreur lors de l'inscription :", error);
+    }
+  };
+
   return (
     <div className="fixed inset-0 bg-gradient-to-br from-blue-50 to-indigo-100">
       <div className="min-h-screen flex items-center justify-center mt">
@@ -17,7 +32,7 @@ export default function RegisterPage() {
             <p className="text-gray-600">Rejoignez la communauté VibeShare</p>
           </div>
 
-          <form className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-6">
             <div className="flex flex-row space-x-4">
             <div>
               <label htmlFor="fullname" className="block text-sm font-medium text-gray-700 mb-2">
@@ -93,10 +108,7 @@ export default function RegisterPage() {
             </div>
 
             <button
-              formAction={()=>{
-                setIsSubmitting(true);
-                signup();
-              }}
+              type="submit"
               className="justify-center  cursor-pointer w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg transition duration-200 transform hover:scale-[1.02]"
             >
               {isSubmitting ? <LoaderCircleIcon className="animate-spin mx-auto" /> : "Créer un compte"}

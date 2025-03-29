@@ -1,44 +1,49 @@
 "use client"; // Ajout pour Next.js car on utilise des hooks côté client
 
 import { useState, useEffect, React } from "react";
-import {createClient} from "@/lib/supabase/client";
+import { createClient } from "@/lib/supabase/client";
 import Link from "next/link";
 import { Menu, X } from "lucide-react"; // Icônes pour le menu
 import Image from "next/image";
+
 export default function NavBar() {
   const [user, setUser] = useState(null);
   const [avatar_url, setAvatarUrl] = useState("/default-avatar.png");
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
-    async function fetchUser() {
-      const supabase = createClient();
-      const { data: userData, error: UserError } =
-        await supabase.auth.getUser();
+    const supabase = createClient();
 
+    // Écoutez les changements d'authentification
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (session) {
+        setUser(session.user);
+        fetchUser(session.user.id);
+      } else {
+        setUser(null);
+      }
+    });
+
+    // Fonction pour récupérer les données de l'utilisateur
+    async function fetchUser(userId) {
       const { data: profilData, error: profilError } = await supabase
         .from("profiles")
         .select(`*`)
-        .eq("id", userData.user?.id)
+        .eq("id", userId)
         .single();
-      const path = profilData.avatar_url;
 
-      const { data, error } = await supabase.storage
-        .from("avatars")
-        .download(path);
-      const url = URL.createObjectURL(data);
-      setAvatarUrl(url);
-
-      if (UserError || profilError || error) {
-        console.error(
-          "Erreur lors de la récupération de l'utilisateur: ",
-          UserError || profilError || error,
-        );
+      if (profilError) {
+        console.error("Erreur lors de la récupération du profil: ", profilError);
       } else {
+        setAvatarUrl(profilData.avatar_url);
         setUser(profilData);
       }
     }
-    fetchUser();
+
+    // Nettoyage de l'abonnement lors du démontage du composant
+    return () => {
+      subscription.unsubscribe();
+    };
   }, []);
 
   return (
@@ -77,12 +82,12 @@ export default function NavBar() {
 
           {/* Boutons Connexion / Profil */}
           <div className="hidden md:flex items-center space-x-4">
-            {user?.id != null && user?.id != undefined ? (
+            {user ? (
               <Link
                 href="/profile"
                 className="flex items-center space-x-2"
               >
-                <Image
+                <img
                   src={`${avatar_url}`}
                   width={32}
                   height={32}
@@ -133,7 +138,7 @@ export default function NavBar() {
             >
               Contact
             </Link>
-            {user?.id != null && user?.id != undefined ? (
+            {user ? (
               <Link
                 href="/profile"
                 className="text-gray-700 hover:text-indigo-600 transition"

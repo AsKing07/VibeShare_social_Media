@@ -47,8 +47,8 @@ export default function UploadImage({ uid, url, size, onUpload, bucket }) {
 
   return (
     <div className="flex flex-col items-center justify-center p-4">
-      {imageUrl ? (
-        <Image
+      {url ? (
+        <img
           width={size}
           height={size}
           src={url}

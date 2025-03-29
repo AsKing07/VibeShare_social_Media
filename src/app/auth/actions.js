@@ -5,6 +5,18 @@ import { redirect } from "next/navigation";
 
 import { createClient } from "@/lib/supabase/server";
 
+export async function signOut() {
+  const supabase = await createClient();
+
+  const { error } = await supabase.auth.signOut()
+
+  if (error) {
+    console.error("Erreur de déconnexion:", error.message);
+    return redirect("/error");
+  }
+  return redirect("/");
+}
+
 export async function login(formData) {
   const supabase = await createClient();
 
@@ -49,19 +61,12 @@ export async function signup(formData) {
     }
   };
 
-  try {
-    const { error } = await supabase.auth.signUp(data);
+  const { error } = await supabase.auth.signUp(data);
 
-    if (error) {
-      console.error("Erreur d'inscription:", error.message);
-      return redirect ("/error");
-    }
-
-    revalidatePath("/", "layout");
-    redirect("/auth/verify-email");
-  } catch (error) {
-    console.error("Erreur lors de l'inscription:", error);
-    // throw error;
-    return redirect ("/error");
+  if (error) {
+    console.error("Erreur d'inscription:", error);
+    throw new Error(error.message);
   }
+
+  return { redirect: '/auth/verify-email' };
 }
