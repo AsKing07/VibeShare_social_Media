@@ -12,9 +12,11 @@ export default function NavBar() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
+
+    
     const supabase = createClient();
 
-    // Écoutez les changements d'authentification
+    // Écoute les changements d'authentification
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       if (session) {
         setUser(session.user);
@@ -40,11 +42,27 @@ export default function NavBar() {
       }
     }
 
-    // Nettoyage de l'abonnement lors du démontage du composant
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, []);
+ // Écoutez les changements de profil en temps réel
+ const profileChannel = supabase
+ .channel("realtime-profiles")
+ .on(
+   "postgres_changes",
+   { event: "UPDATE", schema: "public", table: "profiles" },
+   async (payload) => {
+     if (  user!=null && payload.new.id === user?.id) {
+       // Récupérer les nouvelles données de profil
+       fetchUser(payload.new.id);
+     }
+   }
+ )
+ .subscribe();
+
+// Nettoyage de l'abonnement lors du démontage du composant
+return () => {
+ subscription.unsubscribe();
+ profileChannel.unsubscribe();
+};
+}, []);
 
   return (
     <nav className="bg-white shadow-md fixed w-full top-0 z-50">

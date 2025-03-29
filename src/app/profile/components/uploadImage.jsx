@@ -2,7 +2,7 @@
 "use client";
 import React, {  useState } from "react";
 import { createClient } from "@/lib/supabase/client";
-import Image from "next/image";
+// import Image from "next/image";
 
 export default function UploadImage({ uid, url, size, onUpload, bucket }) {
   const supabase = createClient();

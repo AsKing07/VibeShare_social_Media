@@ -68,6 +68,7 @@ export default function Posts({ user }) {
               console.error("Erreur lors de la récupération du profil :", profileError);
             } else {
               const updatedPostWithProfile = { ...payload.new, profiles: profileData };
+              console.log("Post mis à jour :", updatedPostWithProfile);
               setPosts((prevPosts) =>
                 prevPosts.map((post) =>
                   post.id === updatedPostWithProfile.id ? updatedPostWithProfile : post
@@ -88,11 +89,11 @@ export default function Posts({ user }) {
         }
       });
 
-    // return () => {
-    //   if (channel) {
-    //     channel.unsubscribe();
-    //   }
-    // };
+    return () => {
+      if (channel) {
+        channel.unsubscribe();
+      }
+    };
   }, [supabase]);
 
   const handleDeletePost = async (postId) => {   

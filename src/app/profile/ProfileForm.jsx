@@ -9,7 +9,7 @@ export default function ProfileForm({ user }) {
   const [loading, setLoading] = useState(true);
   const [fullname, setFullname] = useState(null);
   const [username, setUsername] = useState(null);
-  const [avatar_url, setAvatarUrl] = useState(null);
+  const [avatar_url, setAvatarUrl] = useState('/images/default-avatar.jpg');
 
   const getProfile = useCallback(async () => {
     try {
@@ -46,7 +46,7 @@ export default function ProfileForm({ user }) {
     if (user) {
       try {
         setLoading(true);
-        console.log("user", user.id);
+        // console.log("user", user.id);
         const { error } = await supabase
           .from("profiles")
           .update({
@@ -82,6 +82,7 @@ export default function ProfileForm({ user }) {
           url={avatar_url}
           size={90}
           onUpload={(url) => {
+            console.log("url", url);
             setAvatarUrl(url);
             updateProfile({ fullname, username, avatar_url: url });
           }}
