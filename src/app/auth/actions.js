@@ -40,7 +40,9 @@ export async function login(formData) {
 
   if (error) {
     console.error(error);
-    redirect("/error");
+    // redirect("/error");
+    alert("Erreur de connexion");
+    return;
   }
 
   revalidatePath("/", "layout");
@@ -65,7 +67,9 @@ export async function signup(formData) {
 
   if (error) {
     console.error("Erreur d'inscription:", error);
-    throw new Error(error.message);
+    // throw new Error(error.message);
+    alert("Erreur d'inscription");
+    return;
   }
 
   return { redirect: '/auth/verify-email' };
