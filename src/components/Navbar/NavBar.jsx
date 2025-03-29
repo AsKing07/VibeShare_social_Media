@@ -84,7 +84,7 @@ return () => {
             >
               Accueil
             </Link>
-            <Link
+            {/* <Link
               href="#"
               className="text-gray-700 hover:text-indigo-600 transition"
             >
@@ -95,7 +95,7 @@ return () => {
               className="text-gray-700 hover:text-indigo-600 transition"
             >
               Contact
-            </Link>
+            </Link> */}
           </div>
 
           {/* Boutons Connexion / Profil */}
@@ -144,7 +144,7 @@ return () => {
             >
               Accueil
             </Link>
-            <Link
+            {/* <Link
               href="#"
               className="text-gray-700 hover:text-indigo-600 transition"
             >
@@ -155,7 +155,7 @@ return () => {
               className="text-gray-700 hover:text-indigo-600 transition"
             >
               Contact
-            </Link>
+            </Link> */}
             {user ? (
               <Link
                 href="/profile"
