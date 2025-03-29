@@ -43,6 +43,7 @@ export default function ProfileForm({ user }) {
   }, [user, getProfile]);
 
   async function updateProfile({ username, avatar_url }) {
+    
     if (user) {
       try {
         setLoading(true);
@@ -148,7 +149,7 @@ export default function ProfileForm({ user }) {
         <div>
           {/* <form action="/auth/signout" method="post" className="mt-3"> */}
             <button
-              className="cursor-pointer w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-500 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+              className="cursor-pointer mt-2 w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-500 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
                     // type="submit"
               onClick={() => signOut()}
             >

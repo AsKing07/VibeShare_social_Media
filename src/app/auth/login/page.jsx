@@ -3,10 +3,22 @@
 import { login } from "./../actions";
 import React,  { useState } from "react";
 import Link from "next/link";
-import { Eye, EyeClosed } from "lucide-react";
+import { Eye, EyeClosed, LoaderCircleIcon } from "lucide-react";
 
 export default function LoginPage() {
   const [passwordHiden, setPasswordHiden] = useState(true )
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const formData = new FormData(event.target);
+
+    try {
+      login(formData);
+    } catch (error) {
+      console.error("Erreur lors de la connexion :", error);
+    }
+  }
 
   return (
     <div className="fixed inset-0 bg-gradient-to-br from-blue-50 to-indigo-100">
@@ -17,7 +29,9 @@ export default function LoginPage() {
             <p className="text-gray-600">Connectez-vous à votre compte</p>
           </div>
 
-          <form className="space-y-6">
+          <form onSubmit={handleSubmit
+
+          } className="space-y-6">
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
                 Email
@@ -62,9 +76,9 @@ export default function LoginPage() {
 
             <button
               formAction={login}
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg transition duration-200 transform hover:scale-[1.02]"
+              className="cursor-pointer w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg transition duration-200 transform hover:scale-[1.02]"
             >
-              Se connecter
+               {isSubmitting ? <LoaderCircleIcon className="animate-spin mx-auto" /> : "Se connecter"}
             </button>
           </form>
 
