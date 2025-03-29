@@ -54,6 +54,7 @@ export default function Posts({ user }) {
               console.error("Erreur lors de la récupération du profil :", profileError);
             } else {
               const newPostWithProfile = { ...payload.new, profiles: profileData };
+              console.log("Nouveau post :", newPostWithProfile);
               setPosts((prevPosts) => [newPostWithProfile, ...prevPosts]);
             }
           } else if (payload.eventType === "UPDATE") {
@@ -89,11 +90,11 @@ export default function Posts({ user }) {
         }
       });
 
-    return () => {
-      if (channel) {
-        channel.unsubscribe();
-      }
-    };
+    // return () => {
+    //   if (channel) {
+    //     channel.unsubscribe();
+    //   }
+    // };
   }, [supabase]);
 
   const handleDeletePost = async (postId) => {   
