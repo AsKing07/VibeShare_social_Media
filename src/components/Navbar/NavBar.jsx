@@ -8,7 +8,7 @@ import Image from "next/image";
 
 export default function NavBar() {
   const [user, setUser] = useState(null);
-  const [avatar_url, setAvatarUrl] = useState("/default-avatar.png");
+  const [avatar_url, setAvatarUrl] = useState("/images/default-avatar.jpg");
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {

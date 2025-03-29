@@ -41,33 +41,58 @@ export default function Posts({ user }) {
       .on(
         "postgres_changes",
         { event: "*", schema: "public", table: "posts" },
-        (payload) => {
+        async (payload) => {
           if (payload.eventType === "INSERT") {
-            setPosts((prevPosts) => [payload.new, ...prevPosts]);
+            // Récupérer les données de profiles associées pour un nouvel post
+            const { data: profileData, error: profileError } = await supabase
+              .from("profiles")
+              .select("username")
+              .eq("id", payload.new.user_id) // Assurez-vous que user_id est correct
+              .single();
+
+            if (profileError) {
+              console.error("Erreur lors de la récupération du profil :", profileError);
+            } else {
+              const newPostWithProfile = { ...payload.new, profiles: profileData };
+              setPosts((prevPosts) => [newPostWithProfile, ...prevPosts]);
+            }
+          } else if (payload.eventType === "UPDATE") {
+            // Récupérer les données de profiles associées pour un post mis à jour
+            const { data: profileData, error: profileError } = await supabase
+              .from("profiles")
+              .select("username")
+              .eq("id", payload.new.user_id) // Assurez-vous que user_id est correct
+              .single();
+
+            if (profileError) {
+              console.error("Erreur lors de la récupération du profil :", profileError);
+            } else {
+              const updatedPostWithProfile = { ...payload.new, profiles: profileData };
+              setPosts((prevPosts) =>
+                prevPosts.map((post) =>
+                  post.id === updatedPostWithProfile.id ? updatedPostWithProfile : post
+                )
+              );
+            }
           } else if (payload.eventType === "DELETE") {
             setPosts((prevPosts) =>
               prevPosts.filter((post) => post.id !== payload.old.id)
-            );
-          } else if (payload.eventType === "UPDATE") {
-            setPosts((prevPosts) =>
-              prevPosts.map((post) =>
-                post.id === payload.new.id ? payload.new : post
-              )
             );
           }
         }
       )
       .subscribe((status) => {
+        console.log("Statut de l'abonnement :", status);
         if (status === "SUBSCRIBED") {
           setChannel(newChannel);
         }
       });
 
-    return () => {
-      if (channel) {
-        channel.unsubscribe();
-      }
-    };
+    // return () => {
+    //   if (channel) {
+    //     channel.unsubscribe();
+    //   }
+    // };
   }, [supabase]);
 
   const handleDeletePost = async (postId) => {   

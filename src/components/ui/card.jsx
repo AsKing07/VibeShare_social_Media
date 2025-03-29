@@ -21,10 +21,7 @@ export function PostCard({ className, post, userId, onDelete, onEdit, ...props }
       }
    
         if (post.profiles.avatar_url) {
-          const { data: avatarData } = supabase.storage
-            .from("avatars")
-            .getPublicUrl(post.profiles.avatar_url);
-          setAvatarUrl(avatarData.publicUrl);
+          setAvatarUrl(post.profiles.avatar_url);
         }
       
     }
@@ -48,8 +45,9 @@ export function PostCard({ className, post, userId, onDelete, onEdit, ...props }
             className="rounded-full border-2 border-gray-300"
           />
           <div>
-            <h3 className="text-xl font-bold text-gray-800">{post.profiles.username}</h3>
-            <p className="text-sm text-gray-500">
+          <h3 className="text-xl font-bold text-gray-800">
+  {post.profiles ? post.profiles.username : "Utilisateur inconnu"}
+</h3>            <p className="text-sm text-gray-500">
               {new Date(post.created_at).toLocaleDateString()}
             </p>
           </div>
