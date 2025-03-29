@@ -11,10 +11,7 @@ export default function PostForm({user, post, sidebarOpen, closeSidebar }) {
   const [imageUrl, setImageUrl] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    console.log("imageUrl", imageUrl);
-   
-  }, [imageUrl]);
+
 
   useEffect(() => {
     if (post) {
