@@ -3,6 +3,7 @@ import { signup } from "./../actions";
 import React, {useState} from "react";
 import Link from "next/link";
 import { Eye, EyeClosed, LoaderCircleIcon } from "lucide-react";
+import { toast } from "react-toastify";
 
 export default function RegisterPage() {
   const [passwordHiden, setPasswordHiden] = useState(true);
@@ -20,6 +21,7 @@ export default function RegisterPage() {
       }
     } catch (error) {
       console.error("Erreur lors de l'inscription :", error);
+      toast.error("Erreur lors de l'inscription: " + error.message);
     }
   };
 

@@ -28,6 +28,7 @@ export default function Posts({ user }) {
 
       if (postsError) {
         console.error("Erreur lors de la récupération des posts :", postsError);
+        toast.error("Erreur lors de la récupération des posts :", postsError.message);
       } else {
         setPosts(postsData);
 

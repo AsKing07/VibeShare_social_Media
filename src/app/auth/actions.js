@@ -12,7 +12,8 @@ export async function signOut() {
   const { error } = await supabase.auth.signOut()
 
   if (error) {
-    console.error("Erreur de déconnexion:", error.message);
+    // console.error("Erreur de déconnexion:", error.message);
+    toast.error("Erreur de déconnexion: " + error.message);
     return redirect("/error");
   }
   return redirect("/");
@@ -41,6 +42,7 @@ export async function login(formData) {
 
   if (error) {
     console.error(error);
+    
     // redirect("/error");
     // alert("Erreur de connexion");
     toast.error("Erreur de connexion: " + error.message);

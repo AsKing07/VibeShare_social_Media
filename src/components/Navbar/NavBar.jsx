@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/client";
 import Link from "next/link";
 import { Menu, X } from "lucide-react"; // Icônes pour le menu
 import Image from "next/image";
+import { toast } from "react-toastify";
 
 export default function NavBar() {
   const [user, setUser] = useState(null);
@@ -42,6 +43,7 @@ export default function NavBar() {
         setUser(profilData);
       } catch (error) {
         console.error("Erreur lors de la récupération du profil: ", error);
+        toast.error("Erreur lors de la récupération du profil dans le navbar: " + error.message);
         setErrorMessage("Erreur lors de la récupération des données de profil.");
       }
     }
