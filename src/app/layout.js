@@ -1,7 +1,6 @@
 /* eslint-disable react/prop-types */
 import React from "react";
 import "../styles/globals.css";
-// import NavBar from "@/components/Navbar/NavBar";
 import NavBar from "../components/Navbar/NavBar";
 import { ToastContainer } from "react-toastify";
 
@@ -12,7 +11,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="fr" suppressHydrationWarning>
+    <html lang="fr">
       <body>
         <div className="container w-full ">
           <NavBar />

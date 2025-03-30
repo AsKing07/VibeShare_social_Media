@@ -1,8 +1,10 @@
+"use client";
+
 import { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
 import UploadPostImage from "./components/uploadImage";
 import { Dialog, DialogContent, CircularProgress } from "@mui/material";
-import { CloseCircle, AddSquare, Additem } from "iconsax-react";
+import { CloseCircle, AddSquare } from "iconsax-react";
 import { toast } from "react-toastify";
 
 

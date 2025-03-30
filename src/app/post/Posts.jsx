@@ -2,8 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import {PostCard } from "@/components/ui/card";
-import Image from "next/image";
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button, CircularProgress } from "@mui/material";
+import { Button, CircularProgress } from "@mui/material";
 import PostForm from "./PostForm";
 import { redirect } from "next/navigation";
 import { toast } from "react-toastify";
@@ -24,7 +23,7 @@ export default function Posts({ user }) {
         .from("posts")
         .select("*,profiles(*)")
         .order("created_at", { ascending: false });
-        console.log(postsData)
+        // console.log(postsData)
 
       if (postsError) {
         console.error("Erreur lors de la récupération des posts :", postsError);
