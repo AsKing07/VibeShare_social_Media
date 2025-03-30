@@ -2,6 +2,10 @@
   "name": "mini-reseau",
   "version": "0.1.0",
   "private": true,
+  "author": {
+    "name": "Charbel SONON"
+  },
+  "description": "A basic social network ",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
