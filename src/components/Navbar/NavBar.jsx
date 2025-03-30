@@ -39,7 +39,7 @@ export default function NavBar() {
 
         if (profilError) throw profilError;
 
-        setAvatarUrl(profilData.avatar_url);
+       if(profilData.avatar_url) setAvatarUrl(profilData.avatar_url);
         setUser(profilData);
       } catch (error) {
         console.error("Erreur lors de la récupération du profil: ", error);
