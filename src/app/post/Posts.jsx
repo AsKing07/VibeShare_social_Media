@@ -48,7 +48,7 @@ export default function Posts({ user }) {
             // Récupérer les données de profiles associées pour un nouvel post
             const { data: profileData, error: profileError } = await supabase
               .from("profiles")
-              .select("username")
+              .select("*")
               .eq("id", payload.new.user_id) // Assurez-vous que user_id est correct
               .single();
 
@@ -63,7 +63,7 @@ export default function Posts({ user }) {
             // Récupérer les données de profiles associées pour un post mis à jour
             const { data: profileData, error: profileError } = await supabase
               .from("profiles")
-              .select("username")
+              .select("*")
               .eq("id", payload.new.user_id) // Assurez-vous que user_id est correct
               .single();
 
