@@ -2,6 +2,7 @@
 "use client";
 import React, { use, useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
+import { toast } from "react-toastify";
 // import Image from "next/image";
 
 export default function UploadPostImage({ uid, url, size = 300, onUpload, bucket = "post-images" }) {
@@ -39,7 +40,8 @@ export default function UploadPostImage({ uid, url, size = 300, onUpload, bucket
 
       onUpload(data.publicUrl);
     } catch (error) {
-      alert("Erreur lors du téléchargement de l'image !");
+      // alert("Erreur lors du téléchargement de l'image !");
+      toast.error("Erreur lors du téléchargement de l'image: " + error.message);
       console.error("Error uploading image: ", error);
     } finally {
       setUploading(false);

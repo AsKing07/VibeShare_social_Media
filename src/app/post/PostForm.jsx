@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
 import UploadPostImage from "./components/uploadImage";
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button, CircularProgress } from "@mui/material";
+import { Dialog, DialogContent, CircularProgress } from "@mui/material";
 import { CloseCircle, AddSquare, Additem } from "iconsax-react";
+import { toast } from "react-toastify";
 
 
 export default function PostForm({user, post, sidebarOpen, closeSidebar }) {
@@ -24,7 +25,7 @@ export default function PostForm({user, post, sidebarOpen, closeSidebar }) {
     event.preventDefault();
     setLoading(true);
 
-    let erreur;
+    
 
   if(!post)
   {
@@ -35,25 +36,36 @@ export default function PostForm({user, post, sidebarOpen, closeSidebar }) {
         user_id: user?.id,
       },
     ]);
-    if (error)  erreur=error;
+    if (error)
+    {
+      toast.error("Erreur lors de la publication du post: " + error.message);
+
+    }
+    else{
+      toast.success("Post publié avec succès !");
+    }
 
   }
   else{
+    console.log("post",post)
     const { error } = await supabase.from("posts").update({ content, image_url: imageUrl }).eq("id", post.id);
-    if (error) erreur=error;
+    if (error) {
+      toast.error("Erreur lors de la modification du post: " + error.message);
+    }
+    else{
+      toast.success("Post modifié avec succès !");
+     
+
+    }
   }
    
 
     setLoading(false);
+    setContent("");
+    setImageUrl(null);
+    closeSidebar();
 
-    if (erreur) {
-      console.error("Erreur lors de la publication du post :", error);
-    } else {
-      setContent("");
-      setImageUrl(null);
-      alert("Post publié avec succès !");
-      closeSidebar();
-    }
+  
   };
 
   return (

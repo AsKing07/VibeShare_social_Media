@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState, React } from "react";
 import { createClient } from "@/lib/supabase/client";
 import UploadImage from "@/app/profile/components/uploadImage";
 import { signOut } from "../auth/actions";
+import { toast } from "react-toastify";
 export default function ProfileForm({ user }) {
   const supabase = createClient();
   const [loading, setLoading] = useState(true);
@@ -32,7 +33,8 @@ export default function ProfileForm({ user }) {
         setAvatarUrl(data.avatar_url);
       }
     } catch (error) {
-      alert("Erreur de chargement des données utilisateur!");
+      // alert("Erreur de chargement des données utilisateur!");
+      toast.error("Erreur de chargement des données utilisateur: " + error.message);
     } finally {
       setLoading(false);
     }
@@ -58,9 +60,11 @@ export default function ProfileForm({ user }) {
           })
           .eq("id", user?.id);
         if (error) throw error;
-        alert("Profil mis à jour!");
+        // alert("Profil mis à jour!");
+        toast.success("Profil mis à jour!");
       } catch (error) {
-        alert("Erreur mise à jour des données !");
+        // alert("Erreur mise à jour des données !");
+        toast.error("Erreur mise à jour des données: " + error.message);
         console.log(error);
       } finally {
         setLoading(false);

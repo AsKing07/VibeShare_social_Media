@@ -6,6 +6,7 @@ import Image from "next/image";
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, CircularProgress } from "@mui/material";
 import PostForm from "./PostForm";
 import { redirect } from "next/navigation";
+import { toast } from "react-toastify";
 
 export default function Posts({ user }) {
   const supabase = createClient();
@@ -103,11 +104,13 @@ export default function Posts({ user }) {
     const { error } = await supabase.from("posts").delete().eq("id", postId);
     if (error) {
       console.error("Erreur lors de la suppression du post :", error);
-      alert("Erreur lors de la suppression du post :", error);
+      // alert("Erreur lors de la suppression du post :", error);
+      toast.error("Erreur lors de la suppression du post :", error.message);
     } else {
       setPosts((prevPosts) => prevPosts.filter((post) => post.id !== postId));
       setLoading(false);
-      alert("Post supprimé avec succès !");
+      // alert("Post supprimé avec succès !");
+      toast.success("Post supprimé avec succès !");
     }
   };
   
@@ -163,7 +166,7 @@ export default function Posts({ user }) {
       {
         user &&
         (
-          <>
+          
            
 
 <PostForm post={postToEdit} user={user} sidebarOpen={openDialog} closeSidebar={()=>{
@@ -171,7 +174,7 @@ export default function Posts({ user }) {
   setPostToEdit(null);
 }}  />
 
-          </>
+          
         )
       }
      

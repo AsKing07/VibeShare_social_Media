@@ -3,6 +3,7 @@ import React from "react";
 import "../styles/globals.css";
 // import NavBar from "@/components/Navbar/NavBar";
 import NavBar from "../components/Navbar/NavBar";
+import { ToastContainer } from "react-toastify";
 
 export const metadata = {
   title: "VibeShare - Votre Réseau Social",
@@ -16,6 +17,7 @@ export default function RootLayout({ children }) {
         <div className="container w-full ">
           <NavBar />
           <div className="flex flex-col items-center justify-center min-h-screen pt-16 mt-2">
+            <ToastContainer position="top-right" />
             {children}
           </div>
         </div>

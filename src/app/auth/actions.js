@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 import { createClient } from "@/lib/supabase/server";
+import { toast } from "react-toastify";
 
 export async function signOut() {
   const supabase = await createClient();
@@ -41,7 +42,8 @@ export async function login(formData) {
   if (error) {
     console.error(error);
     // redirect("/error");
-    alert("Erreur de connexion");
+    // alert("Erreur de connexion");
+    toast.error("Erreur de connexion: " + error.message);
     return;
   }
 
@@ -68,7 +70,8 @@ export async function signup(formData) {
   if (error) {
     console.error("Erreur d'inscription:", error);
     // throw new Error(error.message);
-    alert("Erreur d'inscription");
+    // alert("Erreur d'inscription");
+    toast.error("Erreur d'inscription: " + error.message);
     return;
   }
 
