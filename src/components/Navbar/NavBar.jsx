@@ -10,6 +10,7 @@ export default function NavBar() {
   const [user, setUser] = useState(null);
   const [avatar_url, setAvatarUrl] = useState("/images/default-avatar.jpg");
   const [menuOpen, setMenuOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null);
 
   useEffect(() => {
 
@@ -28,21 +29,24 @@ export default function NavBar() {
 
     // Fonction pour récupérer les données de l'utilisateur
     async function fetchUser(userId) {
-      const { data: profilData, error: profilError } = await supabase
-        .from("profiles")
-        .select(`*`)
-        .eq("id", userId)
-        .single();
+      try {
+        const { data: profilData, error: profilError } = await supabase
+          .from("profiles")
+          .select(`*`)
+          .eq("id", userId)
+          .single();
 
-      if (profilError) {
-        console.error("Erreur lors de la récupération du profil: ", profilError);
-      } else {
+        if (profilError) throw profilError;
+
         setAvatarUrl(profilData.avatar_url);
         setUser(profilData);
+      } catch (error) {
+        console.error("Erreur lors de la récupération du profil: ", error);
+        setErrorMessage("Erreur lors de la récupération des données de profil.");
       }
     }
 
- // Écoutez les changements de profil en temps réel
+ // Écoute les changements de profil en temps réel
  const profileChannel = supabase
  .channel("realtime-profiles")
  .on(
