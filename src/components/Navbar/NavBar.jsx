@@ -12,22 +12,29 @@ export default function NavBar() {
   const [avatar_url, setAvatarUrl] = useState("/images/default-avatar.jpg");
   const [menuOpen, setMenuOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
+  const supabase = createClient();
 
   useEffect(() => {
 
     
-    const supabase = createClient();
+  
 
     // Écoute les changements d'authentification
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      if (session) {
+      console.log("Événement d'authentification:", event, "Session:", session); // Log pour débogage
+
+      if (event === 'SIGNED_IN') {
+        // handle sign in event
         setUser(session.user);
         fetchUser(session.user.id);
-      } else {
+      } else if (event === 'SIGNED_OUT') {
+        // handle sign out event
+        console.log("Utilisateur déconnecté");
         setUser(null);
-      }
+      } 
+    
     });
-
+  
     // Fonction pour récupérer les données de l'utilisateur
     async function fetchUser(userId) {
       try {
@@ -37,10 +44,16 @@ export default function NavBar() {
           .eq("id", userId)
           .single();
 
-        if (profilError) throw profilError;
 
-       if(profilData.avatar_url) setAvatarUrl(profilData.avatar_url);
-        setUser(profilData);
+
+        if (profilError) {
+    console.error("Erreur lors de la récupération du profil: ", profilError);
+  } else {
+    setUser(profilData);
+    if(profilData.avatar_url) setAvatarUrl(profilData.avatar_url);
+
+  }
+
       } catch (error) {
         console.error("Erreur lors de la récupération du profil: ", error);
         toast.error("Erreur lors de la récupération du profil dans le navbar: " + error.message);
@@ -68,7 +81,7 @@ return () => {
  subscription.unsubscribe();
  profileChannel.unsubscribe();
 };
-}, []);
+}, [supabase]);
 
   return (
     <nav className="bg-white shadow-md fixed w-full top-0 z-50">
